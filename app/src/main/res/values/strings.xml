@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">ZhihuDaily</string>
+    <string name="ok">确定</string>
+    <string name="tips_666">还有这种操作？程序异常,请重新启动程序</string>
 </resources>
