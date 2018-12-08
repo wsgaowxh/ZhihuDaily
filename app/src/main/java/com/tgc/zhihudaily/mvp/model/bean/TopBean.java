@@ -1,4 +1,4 @@
-package com.tgc.zhihudaily.bean;
+package com.tgc.zhihudaily.mvp.model.bean;
 
 import java.util.List;
 
