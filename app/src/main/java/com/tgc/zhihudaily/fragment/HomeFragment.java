@@ -6,6 +6,12 @@ import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
+import android.view.View;
+import android.widget.RelativeLayout;
 
 import com.tgc.zhihudaily.R;
 import com.tgc.zhihudaily.base.App;
@@ -17,10 +23,19 @@ import com.tgc.zhihudaily.utils.DialogUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+
 /**
  * A simple {@link Fragment} subclass.
  */
-public class HomeFragment extends BaseFragment implements HomeView {
+public class HomeFragment extends BaseFragment implements HomeView, View.OnClickListener {
+
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.drawer_layout)
+    DrawerLayout drawerLayout;
+    @BindView(R.id.drawer_top)
+    RelativeLayout drawerTop;
 
     private HomePresenter presenter;
     private List<String> permissionsList = new ArrayList<>();
@@ -34,12 +49,21 @@ public class HomeFragment extends BaseFragment implements HomeView {
 
     @Override
     protected void init() {
-
+        drawerTop.setOnClickListener(this);
     }
 
     @Override
     protected void setupView() {
-
+        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+        toolbar.setTitle(R.string.index_page);
+        toolbar.setTitleTextColor(getResources().getColor(R.color.color_eeeeee));
+        toolbar.setNavigationIcon(R.drawable.ic_menu);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                drawerLayout.openDrawer(Gravity.LEFT);
+            }
+        });
     }
 
     @Override
@@ -95,5 +119,16 @@ public class HomeFragment extends BaseFragment implements HomeView {
     // 需要动态权限申请之后的操作在此进行
     private void load() {
 
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.drawer_top:
+                showToast(R.string.please_login);
+                break;
+                default:
+                    break;
+        }
     }
 }

@@ -5,4 +5,51 @@
     android:layout_height="match_parent"
     tools:context=".fragment.HomeFragment">
 
+    <android.support.v4.widget.DrawerLayout
+        android:id="@+id/drawer_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <include layout="@layout/toolbar"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_gravity="start"
+            android:layout_width="220dp"
+            android:layout_height="match_parent"
+            android:background="@color/color_eeeeee">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="128dp"
+                android:background="@color/colorPrimary"
+                android:id="@+id/drawer_top">
+
+                <ImageView
+                    android:id="@+id/avatar"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginTop="12dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_toRightOf="@id/avatar"
+                    android:text="@string/please_login"
+                    android:textColor="@color/color_eeeeee" />
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+    </android.support.v4.widget.DrawerLayout>
+
 </FrameLayout>

@@ -2,4 +2,8 @@
     <string name="app_name">ZhihuDaily</string>
     <string name="ok">确定</string>
     <string name="tips_666">还有这种操作？程序异常,请重新启动程序</string>
+    <string name="please_login">请登录</string>
+    <string name="drawer_open">Open</string>
+    <string name="drawer_close">Close</string>
+    <string name="index_page">首页</string>
 </resources>
