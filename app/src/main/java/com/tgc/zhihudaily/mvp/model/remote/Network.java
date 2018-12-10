@@ -1,7 +1,10 @@
 package com.tgc.zhihudaily.mvp.model.remote;
 
+import com.tgc.zhihudaily.mvp.model.bean.HandleEvent;
 import com.tgc.zhihudaily.mvp.model.bean.TopBean;
 import com.tgc.zhihudaily.network.Api;
+
+import org.greenrobot.eventbus.EventBus;
 
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
@@ -28,12 +31,12 @@ public class Network {
                 .subscribe(new Consumer<TopBean>() {
                     @Override
                     public void accept(TopBean topBean) throws Exception {
-
+                        EventBus.getDefault().post(new HandleEvent(HandleEvent.BANNER_GET_SUCCESS, topBean));
                     }
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
-
+                        EventBus.getDefault().post(new HandleEvent(HandleEvent.BANNER_GET_FAILED, throwable));
                     }
                 });
     }

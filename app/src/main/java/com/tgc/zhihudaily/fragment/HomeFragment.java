@@ -9,6 +9,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.RelativeLayout;
@@ -16,9 +17,14 @@ import android.widget.RelativeLayout;
 import com.tgc.zhihudaily.R;
 import com.tgc.zhihudaily.base.App;
 import com.tgc.zhihudaily.base.BaseFragment;
+import com.tgc.zhihudaily.mvp.model.bean.TopBean;
+import com.tgc.zhihudaily.mvp.model.remote.BannerImageLoader;
 import com.tgc.zhihudaily.mvp.presenter.HomePresenter;
 import com.tgc.zhihudaily.mvp.view.HomeView;
 import com.tgc.zhihudaily.utils.DialogUtils;
+import com.youth.banner.Banner;
+import com.youth.banner.BannerConfig;
+import com.youth.banner.Transformer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +42,8 @@ public class HomeFragment extends BaseFragment implements HomeView, View.OnClick
     DrawerLayout drawerLayout;
     @BindView(R.id.drawer_top)
     RelativeLayout drawerTop;
+    @BindView(R.id.banner)
+    Banner banner;
 
     private HomePresenter presenter;
     private List<String> permissionsList = new ArrayList<>();
@@ -118,7 +126,7 @@ public class HomeFragment extends BaseFragment implements HomeView, View.OnClick
 
     // 需要动态权限申请之后的操作在此进行
     private void load() {
-
+        presenter.getBanner();
     }
 
     @Override
@@ -130,5 +138,24 @@ public class HomeFragment extends BaseFragment implements HomeView, View.OnClick
                 default:
                     break;
         }
+    }
+
+    @Override
+    public void setBanner(TopBean topBean) {
+        List<String> imageList = new ArrayList<>();
+        List<String> titleList = new ArrayList<>();
+        for (int i = 0; i < topBean.getTop_stories().size(); i++) {
+            imageList.add(topBean.getTop_stories().get(i).getImage());
+            titleList.add(topBean.getTop_stories().get(i).getTitle());
+        }
+        banner.setBannerStyle(BannerConfig.CIRCLE_INDICATOR_TITLE_INSIDE);
+        banner.setImageLoader(new BannerImageLoader());
+        banner.setImages(imageList);
+        banner.setBannerAnimation(Transformer.Default);
+        banner.setBannerTitles(titleList);
+        banner.setDelayTime(2000);
+        banner.setIndicatorGravity(BannerConfig.CENTER);
+        banner.start();
+        Log.i("setBanner", "setBanner: ");
     }
 }
