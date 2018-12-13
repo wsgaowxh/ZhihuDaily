@@ -8,6 +8,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
@@ -15,8 +17,10 @@ import android.view.View;
 import android.widget.RelativeLayout;
 
 import com.tgc.zhihudaily.R;
+import com.tgc.zhihudaily.adapter.LoadNewsAdapter;
 import com.tgc.zhihudaily.base.App;
 import com.tgc.zhihudaily.base.BaseFragment;
+import com.tgc.zhihudaily.listener.EndlessRecyclerOnScrollListener;
 import com.tgc.zhihudaily.mvp.model.bean.TopBean;
 import com.tgc.zhihudaily.mvp.model.remote.BannerImageLoader;
 import com.tgc.zhihudaily.mvp.presenter.HomePresenter;
@@ -44,11 +48,15 @@ public class HomeFragment extends BaseFragment implements HomeView, View.OnClick
     RelativeLayout drawerTop;
     @BindView(R.id.banner)
     Banner banner;
+    @BindView(R.id.recycler_view)
+    RecyclerView recyclerView;
 
     private HomePresenter presenter;
     private List<String> permissionsList = new ArrayList<>();
     private static final String[] permissions =
             new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
+    private int days = 0;
+    private LoadNewsAdapter adapter;
 
     @Override
     protected int getLayout() {
@@ -127,6 +135,7 @@ public class HomeFragment extends BaseFragment implements HomeView, View.OnClick
     // 需要动态权限申请之后的操作在此进行
     private void load() {
         presenter.getBanner();
+        presenter.getNewsList();
     }
 
     @Override
@@ -157,5 +166,25 @@ public class HomeFragment extends BaseFragment implements HomeView, View.OnClick
         banner.setIndicatorGravity(BannerConfig.CENTER);
         banner.start();
         Log.i("setBanner", "setBanner: ");
+    }
+
+    @Override
+    public void setNewsList(List<String> titleList, List<String> imageList) {
+        adapter = new LoadNewsAdapter();
+        adapter.updateData(getContext(), titleList, imageList);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setAdapter(adapter);
+        recyclerView.addOnScrollListener(new EndlessRecyclerOnScrollListener() {
+            @Override
+            public void onLoadMore() {
+                days++;
+                presenter.getNewsList(days);
+            }
+        });
+    }
+
+    @Override
+    public void setOldNewsList(List<String> titleList, List<String> imageList) {
+        adapter.updateData(getContext(), titleList, imageList);
     }
 }
